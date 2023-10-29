@@ -10,17 +10,19 @@ class Enemy(py.sprite.Sprite):
     
     def __init__(self, pos_x, pos_y):
         super().__init__()
-        self.sprites = []
-        self.is_animating = False
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/1.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/2.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/3.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/4.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/5.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/6.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/7.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/8.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
-        self.sprites.append(py.transform.scale(py.image.load('Assets/Art/enemy1/9.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)))
+        self.sprites = [
+            py.transform.scale(py.image.load('Assets/Art/enemy1/1.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)),
+            py.transform.scale(py.image.load('Assets/Art/enemy1/2.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)),
+            py.transform.scale(py.image.load('Assets/Art/enemy1/3.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)),
+            py.transform.scale(py.image.load('Assets/Art/enemy1/4.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)),
+            py.transform.scale(py.image.load('Assets/Art/enemy1/5.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)),
+            py.transform.scale(py.image.load('Assets/Art/enemy1/6.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)),
+            py.transform.scale(py.image.load('Assets/Art/enemy1/7.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)),
+            py.transform.scale(py.image.load('Assets/Art/enemy1/8.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT)),
+            py.transform.scale(py.image.load('Assets/Art/enemy1/9.png'), (s.ENEMY_WIDTH, s.ENEMY_HEIGHT))
+        ]
+        
+        
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         

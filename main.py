@@ -4,7 +4,8 @@ from entities.player import Player1
 from entities.enemy import Enemy
 from entities.item import Item
 from ui.cursor import Cursor, cursor_group
-from draw import draw_window  
+from draw import draw_window
+from event_handler import handle_events
 
 # initialize pygame modules
 py.init()
@@ -29,23 +30,7 @@ def main():
     run = True
     while run:
         clock.tick(settings.FPS)
-        for event in py.event.get():
-            if event.type == py.QUIT:
-                run = False
-                py.quit()
-                return  # This will exit the main() function immediately
-
-            if event.type == py.MOUSEBUTTONDOWN:                
-                cursor_clicked_item = cursor.mouseClick()
-                if cursor_clicked_item:
-                    cursor.channel.play(cursor.click)  # Play the click sound here
-                    for item in py.sprite.spritecollide(cursor, item_group, False): 
-                        # Handle any other logic when an item is clicked
-                        item_group.remove(item)
-
-            if event.type == py.KEYDOWN:
-                for e in enemy:
-                    e.animate()
+        run = handle_events(cursor, item_group)
         cursor.update()
         keys_pressed = py.key.get_pressed()
         player1.handle_movement(keys_pressed)        

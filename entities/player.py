@@ -63,7 +63,6 @@ class Player1(py.sprite.Sprite):
         
         
         self.current_sprite = 0
-       
         
         self.current_sprites = self.sprites_down
         self.current_sprite = 0
@@ -86,24 +85,26 @@ class Player1(py.sprite.Sprite):
                 self.is_animating = False
             self.image = self.current_sprites[int(self.current_sprite)]
     
-    def handle_movement(keys_pressed, player1):
-        if keys_pressed[py.K_a] and player1.rect.x - s.VEL > 0: # left
-            player1.rect.x -= s.VEL
-            player1.current_sprites = player1.sprites_left
-            player1.direction = 'left'
-            player1.animate()
-        if keys_pressed[py.K_d] and player1.rect.x + s.VEL + s.PLAYER1_WIDTH < s.WIDTH: # right
-            player1.rect.x += s.VEL
-            player1.current_sprites = player1.sprites_right
-            player1.direction = 'right'
-            player1.animate()
-        if keys_pressed[py.K_w] and player1.rect.y - s.VEL > 0: # up
-            player1.rect.y -= s.VEL
-            player1.current_sprites = player1.sprites_up
-            player1.direction = 'up'
-            player1.animate()
-        if keys_pressed[py.K_s] and player1.rect.y + s.VEL  + s.PLAYER1_HEIGHT < s.HEIGHT: # down
-            player1.rect.y += s.VEL
-            player1.current_sprites = player1.sprites_down
-            player1.direction = 'down'
-            player1.animate()
+    def handle_movement(self, keys_pressed):
+        self.is_animating = False
+        
+        if keys_pressed[py.K_a] and self.rect.x - s.VEL > 0: # left
+            self.rect.x -= s.VEL
+            self.current_sprites = self.sprites_left
+            self.direction = 'left'
+            self.is_animating = True
+        if keys_pressed[py.K_d] and self.rect.x + s.VEL + s.PLAYER1_WIDTH < s.WIDTH: # right
+            self.rect.x += s.VEL
+            self.current_sprites = self.sprites_right
+            self.direction = 'right'
+            self.is_animating = True
+        if keys_pressed[py.K_w] and self.rect.y - s.VEL > 0: # up
+            self.rect.y -= s.VEL
+            self.current_sprites = self.sprites_up
+            self.direction = 'up'
+            self.is_animating = True
+        if keys_pressed[py.K_s] and self.rect.y + s.VEL  + s.PLAYER1_HEIGHT < s.HEIGHT: # down
+            self.rect.y += s.VEL
+            self.current_sprites = self.sprites_down
+            self.direction = 'down'
+            self.is_animating = True

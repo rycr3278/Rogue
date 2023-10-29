@@ -64,7 +64,7 @@ def main():
                     e.animate()
         cursor.update()
         keys_pressed = py.key.get_pressed()
-        Player1.handle_movement(keys_pressed, player1)        
+        player1.handle_movement(keys_pressed)        
         draw_window(player1, item_group, cursor)
         player_group.update()
     print(f"Number of sprites in cursor_group: {len(cursor_group)}")

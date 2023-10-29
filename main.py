@@ -6,12 +6,15 @@ from entities.item import Item
 from ui.cursor import Cursor, cursor_group
 from draw import draw_window
 from event_handler import handle_events
+from ui.map import DungeonMap
 
 # initialize pygame modules
 py.init()
 py.font.init()
 py.mixer.init()
 
+# initialize dungeon map
+dungeon = DungeonMap()
 
 
 def main():
@@ -27,13 +30,17 @@ def main():
     item_group = Item.get_group()
 
     clock = py.time.Clock()
-    run = True
+    run = True  
+    
     while run:
-        clock.tick(settings.FPS)
         run = handle_events(cursor, item_group)
+        if not run:  # Exit the loop before updating anything if quitting
+            break
+        clock.tick(settings.FPS)
         cursor.update()
         keys_pressed = py.key.get_pressed()
-        player1.handle_movement(keys_pressed)        
+        player1.handle_movement(keys_pressed)
+        dungeon.display_map(settings.WIN)        
         draw_window(player1, item_group, cursor)
         player_group.update()
     print(f"Number of sprites in cursor_group: {len(cursor_group)}")

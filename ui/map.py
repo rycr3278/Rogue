@@ -7,6 +7,9 @@ import config.settings as settings
 FLOOR = 0
 WALL = 1
 DOOR = 2
+TOP_EDGE = 3
+RIGHT_EDGE = 4
+LEFT_EDGE = 5
 
 # Map dimensions
 MAP_WIDTH = 48
@@ -77,6 +80,23 @@ class DungeonMap:
                     self.dungeon_map[x][y2 + 1] = FLOOR  # Add tile below for 2-tile-wide corridor
                     self.dungeon_map[x][y2 + 2] = FLOOR  # Add tile below for 3-tile-wide corridor
 
+    def add_transitional_tiles(self):
+        for y in range(1, MAP_HEIGHT - 1):
+            for x in range(1, MAP_WIDTH - 1):
+                if self.dungeon_map[x][y] == FLOOR:
+                    top = self.dungeon_map[x][y-1]
+                    right = self.dungeon_map[x+1][y]
+                    left = self.dungeon_map[x-1][y]
+
+                    # Check for top edge
+                    if top == WALL:
+                        self.dungeon_map[x][y] = TOP_EDGE
+                    # Check for right edge
+                    elif right == WALL:
+                        self.dungeon_map[x][y] = RIGHT_EDGE
+                    # Check for left edge
+                    elif left == WALL:
+                        self.dungeon_map[x][y] = LEFT_EDGE
 
 
     def generate_dungeon(self):
@@ -88,12 +108,23 @@ class DungeonMap:
         # Connect the rooms
         for i in range(len(self.rooms) - 1):
             self.connect_rooms(self.rooms[i], self.rooms[i + 1])
+        self.add_transitional_tiles()
 
     def display_map(self, screen):
         for y in range(MAP_HEIGHT):
             for x in range(MAP_WIDTH):
+                screen.blit(settings.DEFAULT_TILE, (x * settings.TILE_SIZE, y * settings.TILE_SIZE))
+                
+        for y in range(MAP_HEIGHT):
+            for x in range(MAP_WIDTH):        
                 if self.dungeon_map[x][y] == FLOOR:
                     tile = settings.FLOOR_TILE
+                elif self.dungeon_map[x][y] == TOP_EDGE:
+                    tile = settings.TOP_EDGE_TILE
+                elif self.dungeon_map[x][y] == RIGHT_EDGE:
+                    tile = settings.RIGHT_EDGE_TILE
+                elif self.dungeon_map[x][y] == LEFT_EDGE:
+                    tile = settings.LEFT_EDGE_TILE
                 else:
                     tile = settings.WALL_TILE
                 screen.blit(tile, (x*settings.TILE_SIZE, y*settings.TILE_SIZE))

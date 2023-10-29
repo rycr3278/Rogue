@@ -17,11 +17,23 @@ BROWN = (191, 131, 78)
 TILE_SIZE = 40  # Size of each cell in pixels
 WIDTH = MAP_WIDTH * TILE_SIZE
 HEIGHT = MAP_HEIGHT * TILE_SIZE
+
 FLOOR_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile009.png'))
 FLOOR_TILE = py.transform.scale(FLOOR_TILE, (TILE_SIZE, TILE_SIZE))
 
+DEFAULT_TILE = FLOOR_TILE
+
 WALL_TILE =  py.image.load(os.path.join('Assets/Art/map_tiles/tile012.png')) 
 WALL_TILE = py.transform.scale(WALL_TILE, (TILE_SIZE, TILE_SIZE))
+
+TOP_EDGE_TILE =  py.image.load(os.path.join('Assets/Art/map_tiles/tile019.png')) 
+TOP_EDGE_TILE = py.transform.scale(TOP_EDGE_TILE, (TILE_SIZE, TILE_SIZE))
+
+RIGHT_EDGE_TILE =  py.image.load(os.path.join('Assets/Art/map_tiles/tile018.png')) 
+RIGHT_EDGE_TILE = py.transform.scale(RIGHT_EDGE_TILE, (TILE_SIZE, TILE_SIZE))
+
+LEFT_EDGE_TILE =  py.image.load(os.path.join('Assets/Art/map_tiles/tile020.png')) 
+LEFT_EDGE_TILE = py.transform.scale(LEFT_EDGE_TILE, (TILE_SIZE, TILE_SIZE))
 
 # game settings
 FPS = 60

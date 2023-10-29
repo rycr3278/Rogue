@@ -1,33 +1,17 @@
 import pygame as py
 import config.settings as settings
 from entities.player import Player1
-from entities.enemy import Enemy, enemy_group
+from entities.enemy import Enemy
 from entities.item import Item
 from ui.cursor import Cursor, cursor_group
+from draw import draw_window  
 
 # initialize pygame modules
 py.init()
 py.font.init()
 py.mixer.init()
 
-def draw_window(player1, item_group, cursor):
-    settings.WIN.blit(settings.BG, (0, 0))
-    
-    item_group.draw(settings.WIN)
-    item_group.update()
-    
-    enemy_group.draw(settings.WIN)
-    enemy_group.update()
-    
-    cursor_group.draw(settings.WIN)
-    cursor_group.update()
-    
-    py.draw.rect(settings.WIN, (255, 0, 0), cursor.rect, 2)  # Draw cursor rect in red
-    for item in item_group:
-        py.draw.rect(settings.WIN, (0, 255, 0), item.rect, 2)  # Draw item rects in green
-    
-    settings.WIN.blit(player1.image, (player1.rect.x, player1.rect.y))  # Use player1's image
-    py.display.update()
+
 
 def main():
     py.mouse.set_visible(False)

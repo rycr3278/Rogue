@@ -24,8 +24,10 @@ class Enemy(py.sprite.Sprite):
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         
+        
         self.rect = self.image.get_rect()
         self.rect.topleft = [pos_x, pos_y]
+        
     
     def animate(self):
         self.is_animating = True
@@ -37,10 +39,12 @@ class Enemy(py.sprite.Sprite):
         
         if self.current_sprite >= len(self.sprites):
             self.current_sprite = 0
-            self.is_animating = False
+            #self.is_animating = False
         
         self.image = self.sprites[int(self.current_sprite)]
         
 # enemy
 enemy_group = py.sprite.Group()
 enemy = Enemy(100, 100)
+enemy_group.add(enemy)
+enemy.animate()

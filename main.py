@@ -6,7 +6,7 @@ from entities.item import Item
 from ui.cursor import Cursor, cursor_group
 from draw import draw_window
 from event_handler import handle_events
-from ui.map import DungeonMap
+from ui.map import DungeonMap, MAP_HEIGHT, MAP_WIDTH, FLOOR
 
 # initialize pygame modules
 py.init()
@@ -15,13 +15,20 @@ py.mixer.init()
 
 # initialize dungeon map
 dungeon = DungeonMap()
+player1 = Player1.get_instance(dungeon)
+for y in range(MAP_HEIGHT):
+    for x in range(MAP_WIDTH):
+        if dungeon.dungeon_map[x][y] == FLOOR:
+            player1.rect.x = x * settings.TILE_SIZE
+            player1.rect.y = y * settings.TILE_SIZE
+            break
+    else:
+        continue
+    break
 
 
 def main():
     py.mouse.set_visible(False)
-    player1 = Player1()
-    player1.rect.x = settings.WIDTH // 2
-    player1.rect.y = settings.HEIGHT - 100
     player_group = py.sprite.Group()
     player_group.add(player1)
 

@@ -1,20 +1,27 @@
 import pygame as py
-import config.settings as s
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from ui.map import DungeonMap, MAP_WIDTH, MAP_HEIGHT, FLOOR, WALL
+
+from config import settings as s
 
 
 class Player1(py.sprite.Sprite):
     _instance = None
 
     @classmethod
-    def get_instance(cls):
+    def get_instance(cls, dungeon_instance=None):
         if cls._instance is None:
-            cls._instance = Player1('Assets/Art/player1/axe_shield/walk_down/tile180.png')
+            cls._instance = Player1(dungeon_instance)
         return cls._instance
+
     
-    def __init__(self):
+    def __init__(self, dungeon_instance):
         super().__init__()
-        
+        self.dungeon = dungeon_instance
         # player walking
         self.sprites_down = [
         py.transform.scale(py.image.load('Assets/Art/player1/axe_shield/walk_down/tile180.png'), (s.PLAYER1_WIDTH, s.PLAYER1_HEIGHT)),
@@ -85,26 +92,51 @@ class Player1(py.sprite.Sprite):
                 self.is_animating = False
             self.image = self.current_sprites[int(self.current_sprite)]
     
+    def is_wall_rect(self, rect):
+        # Loop through each tile inside the rect's boundary
+        for y in range(rect.top // s.TILE_SIZE, (rect.bottom + s.TILE_SIZE - 1) // s.TILE_SIZE):
+            for x in range(rect.left // s.TILE_SIZE, (rect.right + s.TILE_SIZE - 1) // s.TILE_SIZE):
+                if self.dungeon.dungeon_map[x][y] == WALL:
+                    return True
+        return False
+
     def handle_movement(self, keys_pressed):
         self.is_animating = False
-        
-        if keys_pressed[py.K_a] and self.rect.x - s.VEL > 0: # left
-            self.rect.x -= s.VEL
-            self.current_sprites = self.sprites_left
-            self.direction = 'left'
-            self.is_animating = True
-        if keys_pressed[py.K_d] and self.rect.x + s.VEL + s.PLAYER1_WIDTH < s.WIDTH: # right
-            self.rect.x += s.VEL
-            self.current_sprites = self.sprites_right
-            self.direction = 'right'
-            self.is_animating = True
-        if keys_pressed[py.K_w] and self.rect.y - s.VEL > 0: # up
-            self.rect.y -= s.VEL
-            self.current_sprites = self.sprites_up
-            self.direction = 'up'
-            self.is_animating = True
-        if keys_pressed[py.K_s] and self.rect.y + s.VEL  + s.PLAYER1_HEIGHT < s.HEIGHT: # down
-            self.rect.y += s.VEL
-            self.current_sprites = self.sprites_down
-            self.direction = 'down'
-            self.is_animating = True
+
+        dx = 0
+        dy = 0
+
+        if keys_pressed[py.K_a]:  # left
+            dx -= s.VEL
+        if keys_pressed[py.K_d]:  # right
+            dx += s.VEL
+        if keys_pressed[py.K_w]:  # up
+            dy -= s.VEL
+        if keys_pressed[py.K_s]:  # down
+            dy += s.VEL
+
+        # Predicted new rect after movement
+        new_rect = self.rect.move(dx, dy)
+
+        # Check for collisions
+        if not self.is_wall_rect(new_rect):
+            self.rect = new_rect
+            
+            # Determine animation based on direction
+            if dx < 0:
+                self.current_sprites = self.sprites_left
+                self.direction = 'left'
+                self.is_animating = True
+            elif dx > 0:
+                self.current_sprites = self.sprites_right
+                self.direction = 'right'
+                self.is_animating = True
+            if dy < 0:
+                self.current_sprites = self.sprites_up
+                self.direction = 'up'
+                self.is_animating = True
+            elif dy > 0:
+                self.current_sprites = self.sprites_down
+                self.direction = 'down'
+                self.is_animating = True
+

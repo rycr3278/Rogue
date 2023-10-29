@@ -54,16 +54,29 @@ class DungeonMap:
             # Move horizontally
             for x in range(min(x1, x2), max(x1, x2) + 1):
                 self.dungeon_map[x][y1] = FLOOR
+                if y1 + 2 < MAP_HEIGHT:  # Ensure we're not out of bounds
+                    self.dungeon_map[x][y1 + 1] = FLOOR  # Add tile below for 2-tile-wide corridor
+                    self.dungeon_map[x][y1 + 2] = FLOOR  # Add tile below for 3-tile-wide corridor
             # Then move vertically
             for y in range(min(y1, y2), max(y1, y2) + 1):
                 self.dungeon_map[x2][y] = FLOOR
+                if x2 + 1 < MAP_WIDTH:  # Ensure we're not out of bounds
+                    self.dungeon_map[x2 + 1][y] = FLOOR  # Add tile to the right for 2-tile-wide corridor
+                    self.dungeon_map[x2 + 2][y] = FLOOR  # Add tile to the right for 3-tile-wide corridor
         else:
             # Move vertically
             for y in range(min(y1, y2), max(y1, y2) + 1):
                 self.dungeon_map[x1][y] = FLOOR
+                if x1 + 1 < MAP_WIDTH:  # Ensure we're not out of bounds
+                    self.dungeon_map[x1 + 1][y] = FLOOR  # Add tile to the right for 2-tile-wide corridor
+                    self.dungeon_map[x1 + 2][y] = FLOOR  # Add tile to the right for 3-tile-wide corridor
             # Then move horizontally
             for x in range(min(x1, x2), max(x1, x2) + 1):
                 self.dungeon_map[x][y2] = FLOOR
+                if y2 + 1 < MAP_HEIGHT:  # Ensure we're not out of bounds
+                    self.dungeon_map[x][y2 + 1] = FLOOR  # Add tile below for 2-tile-wide corridor
+                    self.dungeon_map[x][y2 + 2] = FLOOR  # Add tile below for 3-tile-wide corridor
+
 
 
     def generate_dungeon(self):

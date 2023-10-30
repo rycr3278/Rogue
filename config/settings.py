@@ -4,7 +4,7 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from ui.map import DungeonMap, MAP_WIDTH, MAP_HEIGHT, FLOOR, WALL
+from ui.map import MAP_WIDTH, MAP_HEIGHT
 
 # constant colors
 DARK_BLUE = (62, 76, 89)
@@ -48,6 +48,9 @@ RIGHT_BOTTOM_CORNER_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile
 RIGHT_BOTTOM_CORNER_TILE = py.transform.scale(RIGHT_BOTTOM_CORNER_TILE, (TILE_SIZE, TILE_SIZE))
 
 BOTTOM_EDGE_TILE = py.transform.rotate(LEFT_EDGE_TILE, 90)
+
+DOOR_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile039.png'))
+DOOR_TILE = py.transform.scale(DOOR_TILE, (TILE_SIZE, TILE_SIZE))
 
 # game settings
 FPS = 60

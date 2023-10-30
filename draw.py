@@ -1,8 +1,9 @@
 import pygame as py
 import config.settings as settings
-from entities.enemy import enemy_group
 from ui.cursor import cursor_group
 from ui.map import DungeonMap
+# enemy.py
+from config.globals import enemy_group
 
 def draw_window(player1, item_group, cursor):
     
@@ -28,5 +29,3 @@ def draw_window(player1, item_group, cursor):
     
     settings.WIN.blit(player1.image, (player1.rect.x, player1.rect.y))  # Use player1's image
     py.draw.rect(settings.WIN, (255, 255, 255), player1.rect, 2) # Draw player rect in white
-    
-    py.display.update()

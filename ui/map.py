@@ -3,7 +3,7 @@ import pygame as py
 import config.settings as settings
 
 
-# Constants
+# Define map tile constants
 FLOOR = 0
 WALL = 1
 DOOR = 2
@@ -22,12 +22,14 @@ MAP_HEIGHT = 27
 
 class Room:
     def __init__(self, x, y, width, height):
+        # Initialize the room based on its top-left corner, width, and height
         self.x = x
         self.y = y
         self.width = width
         self.height = height
 
     def create_room(self, dungeon_map):
+        # Fill the defined area of the dungeon map with floor tiles
         for x in range(self.x, self.x + self.width):
             for y in range(self.y, self.y + self.height):
                 dungeon_map[x][y] = FLOOR
@@ -35,6 +37,7 @@ class Room:
 
 class DungeonMap:
     def __init__(self):
+        # Initialize the dungeon map filled with wall tiles and generate the dungeon layout
         self.dungeon_map = [[WALL for y in range(MAP_HEIGHT)] for x in range(MAP_WIDTH)]
         self.rooms = []
         self.generate_dungeon()
@@ -86,6 +89,7 @@ class DungeonMap:
                     self.dungeon_map[x][y2 + 2] = FLOOR  # Add tile below for 3-tile-wide corridor
 
     def add_transitional_tiles(self):
+        # Add transitional tiles like edges between floor and wall
         for y in range(1, MAP_HEIGHT - 1):
             for x in range(1, MAP_WIDTH - 1):
                 if self.dungeon_map[x][y] == FLOOR:
@@ -103,12 +107,13 @@ class DungeonMap:
                     # Check for left edge
                     elif left == WALL:
                         self.dungeon_map[x][y] = LEFT_EDGE
-                    #elif bottom == WALL:
-                        #self.dungeon_map[x][y] = BOTTOM_EDGE
+                    elif bottom == WALL:
+                        self.dungeon_map[x][y] = BOTTOM_EDGE
             
 
                         
     def add_corner_tiles(self):
+        # Identify and add corner tiles in the dungeon
         for y in range(1, MAP_HEIGHT - 1):  # Start at 1 and end before the last to avoid out of bounds error
             for x in range(1, MAP_WIDTH - 1):
                 # Check for left-top corner
@@ -129,12 +134,59 @@ class DungeonMap:
                     self.dungeon_map[x+1][y] == TOP_EDGE):
                     self.dungeon_map[x][y] = LEFT_BOTTOM_CORNER
                     print(f"Set LEFT_BOTTOM_CORNER at ({x}, {y})")
-                    
+                # check for right-bottom corner
                 elif (self.dungeon_map[x][y] == FLOOR and
                     self.dungeon_map[x][y-1] == LEFT_EDGE and 
                     self.dungeon_map[x-1][y] == TOP_EDGE):
                     self.dungeon_map[x][y] = RIGHT_BOTTOM_CORNER
                     print(f"Set RIGHT_BOTTOM_CORNER at ({x}, {y})")
+                    
+    def add_doors(self):
+        # Add doors at specific positions in the dungeon
+        top_door_exists = False
+        right_door_exists = False
+        left_door_exists = False
+        bottom_door_exists = False
+        
+        for y in range(1, MAP_HEIGHT - ((MAP_HEIGHT // 4) * 3)):  # only populate top 25% of map with door
+            for x in range(MAP_WIDTH // 2, MAP_WIDTH - 1):
+                # top door
+                if self.dungeon_map[x][y] == TOP_EDGE and not top_door_exists:
+                    self.dungeon_map[x][y] = DOOR
+                    top_door_exists = True
+                    print(f"Added top door at x: {x}, y: {y}")
+                    
+        for y in range(((MAP_HEIGHT // 4) * 3), MAP_HEIGHT - 1):  # only populate bottom 25% of map with door
+            for x in range(MAP_WIDTH // 2, MAP_WIDTH - 1):        
+                # bottom door
+                if self.dungeon_map[x][y] == BOTTOM_EDGE and not bottom_door_exists:
+                    self.dungeon_map[x][y+1] = DOOR
+                    bottom_door_exists = True
+                    print(f"Added bottom door at x: {x}, y: {y}")
+                    
+        for y in range(1, MAP_HEIGHT - 1):  # only populate left side
+            for x in range(1, MAP_WIDTH // 4):           
+                # left door
+                if self.dungeon_map[x][y] == LEFT_EDGE and not left_door_exists:
+                    self.dungeon_map[x-1][y] = DOOR
+                    self.dungeon_map[x][y] = FLOOR
+                    self.dungeon_map[x-1][y+1] = FLOOR
+                    self.dungeon_map[x][y+1] = FLOOR
+                    left_door_exists = True
+                    print(f"Added left door at x: {x}, y: {y}")
+                    
+        for y in range(1, MAP_HEIGHT - 1):  # only populate right side
+            for x in range(((MAP_WIDTH // 4) * 3), MAP_WIDTH - 1):           
+                # RIGHT  door
+                if self.dungeon_map[x][y] == RIGHT_EDGE and not right_door_exists:
+                    self.dungeon_map[x+1][y] = DOOR
+                    self.dungeon_map[x][y] = FLOOR
+                    self.dungeon_map[x+1][y+1] = FLOOR
+                    self.dungeon_map[x][y+1] = FLOOR
+                    right_door_exists = True
+                    print(f"Added right door at x: {x}, y: {y}")
+
+
         
 
     def generate_dungeon(self):
@@ -148,10 +200,12 @@ class DungeonMap:
             self.connect_rooms(self.rooms[i], self.rooms[i + 1])
         self.add_transitional_tiles()
         self.add_corner_tiles()
+        self.add_doors()
         
 
 
     def display_map(self, screen):
+        # Render the dungeon map onto the screen
         for y in range(MAP_HEIGHT):
             for x in range(MAP_WIDTH):
                 screen.blit(settings.DEFAULT_TILE, (x * settings.TILE_SIZE, y * settings.TILE_SIZE))
@@ -174,8 +228,10 @@ class DungeonMap:
                     tile = settings.LEFT_EDGE_TILE
                 elif self.dungeon_map[x][y] == FLOOR:
                     tile = settings.FLOOR_TILE
-                #elif self.dungeon_map[x][y] == BOTTOM_EDGE:
-                    #tile = settings.BOTTOM_EDGE_TILE
+                elif self.dungeon_map[x][y] == DOOR:
+                    tile = settings.DOOR_TILE
+                elif self.dungeon_map[x][y] == BOTTOM_EDGE:
+                    tile = settings.FLOOR_TILE
                 else:
                     tile = settings.WALL_TILE
                 screen.blit(tile, (x*settings.TILE_SIZE, y*settings.TILE_SIZE))

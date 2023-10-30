@@ -4,10 +4,9 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from ui.map import DungeonMap, MAP_WIDTH, MAP_HEIGHT, FLOOR, WALL
+from ui.map import WALL, DOOR
 
 from config import settings as s
-
 
 class Player1(py.sprite.Sprite):
     _instance = None
@@ -139,4 +138,15 @@ class Player1(py.sprite.Sprite):
                 self.current_sprites = self.sprites_down
                 self.direction = 'down'
                 self.is_animating = True
+                
+    def collided_with_door(self):
+        """Check if the player has collided with a door."""
+        # Calculate the tile index based on the player's position
+        x = self.rect.centerx // s.TILE_SIZE
+        y = self.rect.centery // s.TILE_SIZE
+        
+        # Check if the tile at this index is a DOOR
+        if self.dungeon.dungeon_map[x][y] == DOOR:
+            return True
+        return False
 

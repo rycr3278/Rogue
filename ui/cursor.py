@@ -1,5 +1,7 @@
 import pygame as py
 from entities.item import Item
+from config.globals import item_group
+
 
 py.mixer.init()
 
@@ -25,10 +27,10 @@ class Cursor(py.sprite.Sprite):
     def mouseClick(self):
         print("Checking for collision...")  # Diagnostic print
         print(f"Cursor checking collision at: ({self.rect.x}, {self.rect.y})")  # Diagnostic print
-        for item in Item.get_group():
+        for item in item_group:
             print(f"Item at: ({item.rect.x}, {item.rect.y}) with size: {item.rect.width}x{item.rect.height}")
-        print(f"Number of items: {len(Item.get_group())}")  # Diagnostic print
-        items_hit = py.sprite.spritecollide(self, Item.get_group(), False)  # Don't remove the item here
+        print(f"Number of items: {len(item_group)}")  # Diagnostic print
+        items_hit = py.sprite.spritecollide(self, item_group, False)  # Don't remove the item here
         return bool(items_hit)
 
 

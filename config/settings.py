@@ -35,6 +35,20 @@ RIGHT_EDGE_TILE = py.transform.scale(RIGHT_EDGE_TILE, (TILE_SIZE, TILE_SIZE))
 LEFT_EDGE_TILE =  py.image.load(os.path.join('Assets/Art/map_tiles/tile020.png')) 
 LEFT_EDGE_TILE = py.transform.scale(LEFT_EDGE_TILE, (TILE_SIZE, TILE_SIZE))
 
+LEFT_TOP_CORNER_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile029.png'))
+LEFT_TOP_CORNER_TILE = py.transform.scale(LEFT_TOP_CORNER_TILE, (TILE_SIZE, TILE_SIZE))
+
+RIGHT_TOP_CORNER_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile027.png'))
+RIGHT_TOP_CORNER_TILE = py.transform.scale(RIGHT_TOP_CORNER_TILE, (TILE_SIZE, TILE_SIZE))
+
+LEFT_BOTTOM_CORNER_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile036.png'))
+LEFT_BOTTOM_CORNER_TILE = py.transform.scale(LEFT_BOTTOM_CORNER_TILE, (TILE_SIZE, TILE_SIZE))
+
+RIGHT_BOTTOM_CORNER_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile038.png'))
+RIGHT_BOTTOM_CORNER_TILE = py.transform.scale(RIGHT_BOTTOM_CORNER_TILE, (TILE_SIZE, TILE_SIZE))
+
+BOTTOM_EDGE_TILE = py.transform.rotate(LEFT_EDGE_TILE, 90)
+
 # game settings
 FPS = 60
 VEL = 2
@@ -47,6 +61,3 @@ ENEMY_WIDTH, ENEMY_HEIGHT = 32, 48
 WIN = py.display.set_mode((WIDTH, HEIGHT))
 py.display.set_caption("Veiled Hollow")
 py.mouse.set_visible(False)
-
-
-BG = py.image.load(os.path.join('Assets/Art/workingbg.jpg'))

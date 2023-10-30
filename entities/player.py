@@ -116,6 +116,8 @@ class Player1(py.sprite.Sprite):
 
         # Predicted new rect after movement
         new_rect = self.rect.move(dx, dy)
+        
+
 
         # Check for collisions
         if not self.is_wall_rect(new_rect):
@@ -140,13 +142,45 @@ class Player1(py.sprite.Sprite):
                 self.is_animating = True
                 
     def collided_with_door(self):
-        """Check if the player has collided with a door."""
+        """Check if the player has collided with a door and return its direction."""
         # Calculate the tile index based on the player's position
         x = self.rect.centerx // s.TILE_SIZE
         y = self.rect.centery // s.TILE_SIZE
+
+        print(f"Player's coordinates: {(x,y)}")  # Debugging log
+
+        door_coords = self.dungeon.get_door_coordinates()
+
+        for direction, coords in door_coords.items():
+            if (x, y) == coords:
+                return direction
+
+        return None
+
+    def door_direction(self, dungeon):
+        """Determine which side of the screen the door is on based on the x-coordinate."""
+        x = self.rect.centerx // s.TILE_SIZE
+        y = self.rect.centery // s.TILE_SIZE
+
+        door_coords = dungeon.get_door_coordinates()
+
+        print(f"Player's coordinates for door direction: {(x,y)}")  # Debugging log
+        print(f"Door coordinates: {door_coords}")  # Debugging log
+
+        if (x, y) == door_coords["top"]:
+            return "top"
+        elif (x, y) == door_coords["bottom"]:
+            return "bottom"
+        elif (x, y) == door_coords["left"]:
+            return "left"
+        elif (x, y) == door_coords["right"]:
+            return "right"
+        else:
+            print("Player is not on any door!")
+            return None
+
+
+
+    
         
-        # Check if the tile at this index is a DOOR
-        if self.dungeon.dungeon_map[x][y] == DOOR:
-            return True
-        return False
 

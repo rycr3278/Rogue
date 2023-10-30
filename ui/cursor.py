@@ -15,21 +15,18 @@ class Cursor(py.sprite.Sprite):
         return cls._instance
     
     def __init__(self, picture_path):
-        print("Cursor instance created")
+        
         super().__init__()
         self.image = py.image.load(picture_path)
         self.rect = self.image.get_rect()
         self.channel = py.mixer.Channel(0)
         self.click = py.mixer.Sound('Assets/Sound/mixkit-classic-click-1117.wav')
-        print(f"Cursor rect size: {self.rect.width}x{self.rect.height}")  # Diagnostic print
+        
 
         
     def mouseClick(self):
         print("Checking for collision...")  # Diagnostic print
         print(f"Cursor checking collision at: ({self.rect.x}, {self.rect.y})")  # Diagnostic print
-        for item in item_group:
-            print(f"Item at: ({item.rect.x}, {item.rect.y}) with size: {item.rect.width}x{item.rect.height}")
-        print(f"Number of items: {len(item_group)}")  # Diagnostic print
         items_hit = py.sprite.spritecollide(self, item_group, False)  # Don't remove the item here
         return bool(items_hit)
 
@@ -39,7 +36,7 @@ class Cursor(py.sprite.Sprite):
         self.rect.x = mouseX - self.rect.width // 2
         self.rect.y = mouseY - self.rect.height // 2
         self.rect.x, self.rect.y = py.mouse.get_pos()
-        #print(f"Cursor positioned at: ({self.rect.x}, {self.rect.y})")  # Diagnostic print
+        
         
 # cursor
 cursor = Cursor('Assets/Art/Cursor1.png')

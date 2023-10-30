@@ -33,13 +33,13 @@ class Room:
         for x in range(self.x, self.x + self.width):
             for y in range(self.y, self.y + self.height):
                 dungeon_map[x][y] = FLOOR
-        print(f"Room created at x:{self.x}, y:{self.y}, width:{self.width}, height:{self.height}")
 
-class DungeonMap:
+class DungeonMap:    
     def __init__(self):
         # Initialize the dungeon map filled with wall tiles and generate the dungeon layout
         self.dungeon_map = [[WALL for y in range(MAP_HEIGHT)] for x in range(MAP_WIDTH)]
         self.rooms = []
+        self.door_coordinates = {"top":(0,0), "bottom":(0,0), "left":(0,0), "right":(0,0)}
         self.generate_dungeon()
 
     def add_room(self, room):
@@ -121,25 +121,25 @@ class DungeonMap:
                     self.dungeon_map[x][y-1] == WALL and 
                     self.dungeon_map[x-1][y] == WALL):
                     self.dungeon_map[x][y] = LEFT_TOP_CORNER
-                    print(f"Set LEFT_TOP_CORNER at ({x}, {y})")
+                    
                 # Check for right-top corner
                 elif (self.dungeon_map[x][y] == TOP_EDGE and
                     self.dungeon_map[x][y-1] == WALL and 
                     self.dungeon_map[x+1][y] == WALL):
                     self.dungeon_map[x][y] = RIGHT_TOP_CORNER
-                    print(f"Set RIGHT_TOP_CORNER at ({x}, {y})")
+                    
                 # Check for left-bottom corner
                 elif (self.dungeon_map[x][y] == FLOOR and
                     self.dungeon_map[x][y-1] == RIGHT_EDGE and 
                     self.dungeon_map[x+1][y] == TOP_EDGE):
                     self.dungeon_map[x][y] = LEFT_BOTTOM_CORNER
-                    print(f"Set LEFT_BOTTOM_CORNER at ({x}, {y})")
+                    
                 # check for right-bottom corner
                 elif (self.dungeon_map[x][y] == FLOOR and
                     self.dungeon_map[x][y-1] == LEFT_EDGE and 
                     self.dungeon_map[x-1][y] == TOP_EDGE):
                     self.dungeon_map[x][y] = RIGHT_BOTTOM_CORNER
-                    print(f"Set RIGHT_BOTTOM_CORNER at ({x}, {y})")
+                        
                     
     def add_doors(self):
         # Add doors at specific positions in the dungeon
@@ -154,6 +154,7 @@ class DungeonMap:
                 if self.dungeon_map[x][y] == TOP_EDGE and not top_door_exists:
                     self.dungeon_map[x][y] = DOOR
                     top_door_exists = True
+                    self.door_coordinates["top"] = (x, y)
                     print(f"Added top door at x: {x}, y: {y}")
                     
         for y in range(((MAP_HEIGHT // 4) * 3), MAP_HEIGHT - 1):  # only populate bottom 25% of map with door
@@ -162,6 +163,7 @@ class DungeonMap:
                 if self.dungeon_map[x][y] == BOTTOM_EDGE and not bottom_door_exists:
                     self.dungeon_map[x][y+1] = DOOR
                     bottom_door_exists = True
+                    self.door_coordinates["bottom"] = (x, y)
                     print(f"Added bottom door at x: {x}, y: {y}")
                     
         for y in range(1, MAP_HEIGHT - 1):  # only populate left side
@@ -173,6 +175,7 @@ class DungeonMap:
                     self.dungeon_map[x-1][y+1] = FLOOR
                     self.dungeon_map[x][y+1] = FLOOR
                     left_door_exists = True
+                    self.door_coordinates["left"] = (x, y)
                     print(f"Added left door at x: {x}, y: {y}")
                     
         for y in range(1, MAP_HEIGHT - 1):  # only populate right side
@@ -184,9 +187,11 @@ class DungeonMap:
                     self.dungeon_map[x+1][y+1] = FLOOR
                     self.dungeon_map[x][y+1] = FLOOR
                     right_door_exists = True
+                    self.door_coordinates["right"] = (x, y)
                     print(f"Added right door at x: {x}, y: {y}")
 
-
+    def get_door_coordinates(self):
+        return self.door_coordinates
         
 
     def generate_dungeon(self):

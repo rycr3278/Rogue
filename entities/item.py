@@ -17,8 +17,7 @@ class Item(py.sprite.Sprite):
             pos_x, pos_y = self.find_floor_tile(dungeon_map)
     
         self.rect.topleft = [pos_x * s.TILE_SIZE, pos_y * s.TILE_SIZE]
-        print(f"Item positioned at: ({pos_x}, {pos_y})")  # Diagnostic print
-        print(f"Item rect size: {self.rect.width}x{self.rect.height}")  # Diagnostic print
+        
         
     def find_floor_tile(self, dungeon_map):
         """Find a random floor tile to place the item."""

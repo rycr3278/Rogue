@@ -21,6 +21,9 @@ USED_DOOR = 11
 MAP_WIDTH = 48
 MAP_HEIGHT = 27
 
+# Map safety border to prevent rooms from being generated on edges
+SAFETY_MARGIN = 2
+
 class Room:
     def __init__(self, x, y, width, height):
         # Initialize the room based on its top-left corner, width, and height
@@ -45,7 +48,7 @@ class DungeonMap:
         print('new dungeon generated')
 
     def add_room(self, room):
-        # Check if room overlaps with existing rooms before adding.
+        # Check if room overlaps with existing rooms or is too close to the edges.
         overlap = False
         for r in self.rooms:
             if (room.x < r.x + r.width and room.x + room.width > r.x and
@@ -53,9 +56,17 @@ class DungeonMap:
                 overlap = True
                 break
         
-        if not overlap:
+        # Check if room is too close to the edges
+        too_close_to_edge = (room.x < SAFETY_MARGIN or 
+                             room.y < SAFETY_MARGIN or 
+                             room.x + room.width > MAP_WIDTH - SAFETY_MARGIN or 
+                             room.y + room.height > MAP_HEIGHT - SAFETY_MARGIN)
+        
+        if not overlap and not too_close_to_edge:
             room.create_room(self.dungeon_map)
             self.rooms.append(room)
+        else:
+            print("Room is either overlapping with another room or too close to the edge.")
 
     def connect_rooms(self, room1, room2):
         # Find center of rooms
@@ -70,12 +81,14 @@ class DungeonMap:
                 if y1 + 2 < MAP_HEIGHT:  # Ensure we're not out of bounds
                     self.dungeon_map[x][y1 + 1] = FLOOR  # Add tile below for 2-tile-wide corridor
                     self.dungeon_map[x][y1 + 2] = FLOOR  # Add tile below for 3-tile-wide corridor
+                    self.dungeon_map[x][y1 + 3] = FLOOR  # Add tile below for 3-tile-wide corridor
             # Then move vertically
             for y in range(min(y1, y2), max(y1, y2) + 1):
                 self.dungeon_map[x2][y] = FLOOR
                 if x2 + 1 < MAP_WIDTH:  # Ensure we're not out of bounds
                     self.dungeon_map[x2 + 1][y] = FLOOR  # Add tile to the right for 2-tile-wide corridor
                     self.dungeon_map[x2 + 2][y] = FLOOR  # Add tile to the right for 3-tile-wide corridor
+                    self.dungeon_map[x2 + 3][y] = FLOOR  # Add tile to the right for 3-tile-wide corridor
         else:
             # Move vertically
             for y in range(min(y1, y2), max(y1, y2) + 1):
@@ -83,12 +96,14 @@ class DungeonMap:
                 if x1 + 1 < MAP_WIDTH:  # Ensure we're not out of bounds
                     self.dungeon_map[x1 + 1][y] = FLOOR  # Add tile to the right for 2-tile-wide corridor
                     self.dungeon_map[x1 + 2][y] = FLOOR  # Add tile to the right for 3-tile-wide corridor
+                    self.dungeon_map[x1 + 3][y] = FLOOR  # Add tile to the right for 3-tile-wide corridor
             # Then move horizontally
             for x in range(min(x1, x2), max(x1, x2) + 1):
                 self.dungeon_map[x][y2] = FLOOR
                 if y2 + 1 < MAP_HEIGHT:  # Ensure we're not out of bounds
                     self.dungeon_map[x][y2 + 1] = FLOOR  # Add tile below for 2-tile-wide corridor
                     self.dungeon_map[x][y2 + 2] = FLOOR  # Add tile below for 3-tile-wide corridor
+                    self.dungeon_map[x][y2 + 3] = FLOOR  # Add tile below for 3-tile-wide corridor
 
     def add_transitional_tiles(self):
         # Add transitional tiles like edges between floor and wall
@@ -150,7 +165,7 @@ class DungeonMap:
         left_door_exists = False
         bottom_door_exists = False
         
-        for y in range(1, MAP_HEIGHT // 2):  # only populate top 50% of map with door
+        for y in range(1, MAP_HEIGHT - 1):  # only populate top 50% of map with door
             for x in range(MAP_WIDTH // 3, MAP_WIDTH - 1):
                 # top door
                 if self.dungeon_map[x][y] == TOP_EDGE and not top_door_exists:

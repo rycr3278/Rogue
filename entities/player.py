@@ -123,8 +123,6 @@ class Player1(py.sprite.Sprite):
 
         # Predicted new rect after movement
         new_rect = self.rect.move(dx, dy)
-        
-
 
         # Check for collisions
         if not self.is_wall_rect(new_rect):
@@ -153,21 +151,20 @@ class Player1(py.sprite.Sprite):
         self.kill()  # This will remove the sprite from all groups it belongs to
         Player1._instance = None
 
-    # Update the collided_with_door method to use the new door_direction logic
     def collided_with_door(self):
         """Check if the player has collided with a door and return its direction."""
-        direction = self.door_direction(self.dungeon)
-        return direction
-
-    def door_direction(self, dungeon):
-        """Determine which side of the screen the door is on based on the x-coordinate."""
         x = self.rect.centerx // s.TILE_SIZE
         y = self.rect.centery // s.TILE_SIZE
 
-        door_coords = dungeon.get_door_coordinates()
+        # Check if the tile the player is colliding with is a DOOR tile
+        if self.dungeon.dungeon_map[x][y] == DOOR:
+            direction = self.door_direction(x, y)  # Pass x and y to the door_direction method
+            return direction
+        return None
 
-        #print(f"Player's coordinates for door direction: {(x,y)}")  # Debugging log
-        #print(f"Door coordinates: {door_coords}")  # Debugging log
+    def door_direction(self, x, y):  # Add x and y as parameters
+        """Determine which side of the screen the door is on based on the x-coordinate."""
+        door_coords = self.dungeon.get_door_coordinates()
 
         if (x, y) == door_coords["top"]:
             return "top"
@@ -178,8 +175,8 @@ class Player1(py.sprite.Sprite):
         elif (x, y) == door_coords["right"]:
             return "right"
         else:
-            #print("Player is not on any door!")
             return None
+
 
 
 

@@ -52,11 +52,14 @@ BOTTOM_EDGE_TILE = py.transform.rotate(LEFT_EDGE_TILE, 90)
 DOOR_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile039.png'))
 DOOR_TILE = py.transform.scale(DOOR_TILE, (TILE_SIZE, TILE_SIZE))
 
+USED_DOOR_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/tile041.png'))
+USED_DOOR_TILE = py.transform.scale(USED_DOOR_TILE, (TILE_SIZE, TILE_SIZE))
+
 # game settings
 FPS = 60
 VEL = 6
 
-PLAYER1_WIDTH, PLAYER1_HEIGHT = 60, 60
+PLAYER1_WIDTH, PLAYER1_HEIGHT = 64, 64
 
 ENEMY_WIDTH, ENEMY_HEIGHT = 32, 48
 

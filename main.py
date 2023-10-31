@@ -6,7 +6,7 @@ from entities.item import Item
 from ui.cursor import Cursor, cursor_group
 from draw import draw_window
 from event_handler import handle_events
-from ui.map import DungeonMap, MAP_HEIGHT, MAP_WIDTH, FLOOR, DOOR
+from ui.map import DungeonMap, MAP_HEIGHT, MAP_WIDTH, FLOOR, DOOR, USED_DOOR
 from config.globals import enemy_group, item_group
 
 # Initialize pygame modules needed for the game
@@ -131,6 +131,9 @@ def main():
             
             print("new_x, new_y", new_x, new_y)
             
+            # shut door
+            new_dungeon.dungeon_map[new_x][new_y] = USED_DOOR
+            
             if new_x is not None and new_y is not None:
                 
                 is_wiping = True
@@ -152,6 +155,16 @@ def main():
                     # For rendering
                     render_x = new_x * settings.TILE_SIZE
                     render_y = new_y * settings.TILE_SIZE
+                    
+                    # offset player position to help prevent spawning in walls
+                    if door_direction == "top":
+                        render_y -= settings.PLAYER1_HEIGHT * 2
+                    elif door_direction == "bottom":
+                        render_y += settings.PLAYER1_HEIGHT
+                    elif door_direction == "left":
+                        render_x -= settings.PLAYER1_WIDTH * 2
+                    elif door_direction == "right":
+                        render_x += settings.PLAYER1_WIDTH
 
                     # Create a new player instance at the new coordinates
                     player1 = Player1.get_instance(dungeon, render_x, render_y)

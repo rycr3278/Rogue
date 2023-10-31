@@ -15,6 +15,7 @@ LEFT_TOP_CORNER = 7
 LEFT_BOTTOM_CORNER = 8
 RIGHT_BOTTOM_CORNER = 9
 BOTTOM_EDGE = 10
+USED_DOOR = 11
 
 # Map dimensions
 MAP_WIDTH = 48
@@ -163,8 +164,10 @@ class DungeonMap:
                 # bottom door
                 if self.dungeon_map[x][y] == BOTTOM_EDGE and not bottom_door_exists:
                     self.dungeon_map[x][y+1] = DOOR
+                    self.dungeon_map[x+1][y+1] = FLOOR
+                    self.dungeon_map[x-1][y+1] = FLOOR
                     bottom_door_exists = True
-                    self.door_coordinates["bottom"] = (x, y)
+                    self.door_coordinates["bottom"] = (x, y + 1)
                     print(f"Added bottom door at x: {x}, y: {y}")
                     
         for y in range(1, MAP_HEIGHT - 1):  # only populate left side
@@ -176,7 +179,7 @@ class DungeonMap:
                     self.dungeon_map[x-1][y+1] = FLOOR
                     self.dungeon_map[x][y+1] = FLOOR
                     left_door_exists = True
-                    self.door_coordinates["left"] = (x, y)
+                    self.door_coordinates["left"] = (x - 1, y)
                     print(f"Added left door at x: {x}, y: {y}")
                     
         for y in range(1, MAP_HEIGHT - 1):  # only populate right side
@@ -188,8 +191,12 @@ class DungeonMap:
                     self.dungeon_map[x+1][y+1] = FLOOR
                     self.dungeon_map[x][y+1] = FLOOR
                     right_door_exists = True
-                    self.door_coordinates["right"] = (x, y)
+                    self.door_coordinates["right"] = (x + 1, y)
                     print(f"Added right door at x: {x}, y: {y}")
+        
+
+        
+                    
 
     def get_door_coordinates(self):
         return self.door_coordinates
@@ -234,6 +241,8 @@ class DungeonMap:
                     tile = settings.LEFT_EDGE_TILE
                 elif self.dungeon_map[x][y] == FLOOR:
                     tile = settings.FLOOR_TILE
+                elif self.dungeon_map[x][y] == USED_DOOR:
+                    tile = settings.USED_DOOR_TILE  
                 elif self.dungeon_map[x][y] == DOOR:
                     tile = settings.DOOR_TILE
                 elif self.dungeon_map[x][y] == BOTTOM_EDGE:

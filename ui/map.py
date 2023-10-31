@@ -41,6 +41,7 @@ class DungeonMap:
         self.rooms = []
         self.door_coordinates = {"top":(0,0), "bottom":(0,0), "left":(0,0), "right":(0,0)}
         self.generate_dungeon()
+        print('new dungeon generated')
 
     def add_room(self, room):
         # Check if room overlaps with existing rooms before adding.

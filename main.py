@@ -43,6 +43,7 @@ for y in range(MAP_HEIGHT):
 
 def get_new_spawn_coordinates(direction, new_dungeon):
     door_coords = new_dungeon.get_door_coordinates()
+    print('door coords', door_coords)
 
     # Determine the opposite door direction
     opposite_direction = {
@@ -51,21 +52,21 @@ def get_new_spawn_coordinates(direction, new_dungeon):
         "top": "bottom",
         "bottom": "top"
     }.get(direction)
+    print('player should appear on the door tile at the ', opposite_direction, ' of the new room')
     
     if opposite_direction in door_coords:  # Additional check to ensure the key exists
         x, y = door_coords[opposite_direction]
-        if opposite_direction == "top":
-            y += settings.TILE_SIZE
-        elif opposite_direction == "bottom":
-            y -= settings.TILE_SIZE
-        elif opposite_direction == "left":
-            x += settings.TILE_SIZE
-        elif opposite_direction == "right":
-            x -= settings.TILE_SIZE
+        
+        # Ensure x and y are within valid range
+        x = max(0, min(x, MAP_WIDTH * settings.TILE_SIZE - 1))
+        y = max(0, min(y, MAP_HEIGHT * settings.TILE_SIZE - 1))
+        print('get_new_spawn_coordinates is outputting coordinates: x:', x, ', y:', y)
         return x, y
     else:
         print("Unexpected door_direction:", direction)
-        return None, None
+        # Return default spawn location (center of the map)
+        return MAP_WIDTH * settings.TILE_SIZE // 2, MAP_HEIGHT * settings.TILE_SIZE // 2
+
 
 
 # Main game loop function
@@ -119,15 +120,19 @@ def main():
         door_direction = player1.collided_with_door()
         
         if door_direction and not is_wiping:
+            
+            print('player walked through the door at the ', door_direction)
+            
             # Generate new map
             new_dungeon = DungeonMap()
-
+            
             # Determine the new spawn coordinates based on the door's direction
             new_x, new_y = get_new_spawn_coordinates(door_direction, new_dungeon)
+            
             print("new_x, new_y", new_x, new_y)
             
             if new_x is not None and new_y is not None:
-                print(door_direction)
+                
                 is_wiping = True
                 wiping_direction = 1  # Start the wipe-in transition
             else:
@@ -144,8 +149,14 @@ def main():
                     # Remove the current player instance
                     player1.remove()
 
+                    # For rendering
+                    render_x = new_x * settings.TILE_SIZE
+                    render_y = new_y * settings.TILE_SIZE
+
                     # Create a new player instance at the new coordinates
-                    player1 = Player1.get_instance(dungeon, (new_x * settings.TILE_SIZE), (new_y * settings.TILE_SIZE))
+                    player1 = Player1.get_instance(dungeon, render_x, render_y)
+                    print('player generated at render_x: ', render_x, ' and render_y: ', render_y)
+
                     player_group.add(player1)  # Add the new player instance to the sprite group
 
                     wiping_direction = -1  # Start wiping out

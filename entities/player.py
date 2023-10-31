@@ -99,6 +99,9 @@ class Player1(py.sprite.Sprite):
         # Loop through each tile inside the rect's boundary
         for y in range(rect.top // s.TILE_SIZE, (rect.bottom + s.TILE_SIZE - 1) // s.TILE_SIZE):
             for x in range(rect.left // s.TILE_SIZE, (rect.right + s.TILE_SIZE - 1) // s.TILE_SIZE):
+                x = max(0, min(x, len(self.dungeon.dungeon_map) - 1))
+                y = max(0, min(y, len(self.dungeon.dungeon_map[0]) - 1))
+
                 if self.dungeon.dungeon_map[x][y] == WALL:
                     return True
         return False

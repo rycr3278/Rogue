@@ -264,13 +264,10 @@ class DungeonMap:
         self.add_transitional_tiles()
         self.add_corner_tiles()
         self.add_doors()
-        
-
-
-    
                  
     def display_map(self, screen):
         # Render the dungeon map onto the screen 
         for y in range(MAP_HEIGHT):
             for x in range(MAP_WIDTH):
+                screen.blit(settings.DEFAULT_TILE, (x * settings.TILE_SIZE, y * settings.TILE_SIZE))
                 screen.blit(self.display_tiles[x][y], (x * settings.TILE_SIZE, y * settings.TILE_SIZE))

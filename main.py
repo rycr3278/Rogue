@@ -1,5 +1,6 @@
 import pygame as py
 import config.settings as settings
+import random
 from entities.player import Player1
 from entities.enemy import Enemy
 from entities.item import Item
@@ -85,8 +86,11 @@ def main():
     cursor = Cursor.get_instance()
     
     # Create an enemy instance and add it to the enemy group
-    enemy = Enemy(dungeon)
-    enemy_group.add(enemy)
+    
+    enemy = Enemy(dungeon)  # Create a new enemy instance for the new dungeon
+    print('enemy instance created')
+    enemy_group.add(enemy)  # Add the new enemy instance to the sprite group
+    print('enemy added')
     enemy.animate()
     
     # Create an item instance and add it to the item group
@@ -151,6 +155,13 @@ def main():
                     
                     # Remove the current player instance
                     player1.remove()
+                    
+                    for enemy in enemy_group:
+                        enemy.remove(enemy_group)
+                        print('enemy removed')
+                    
+                    
+                    item.remove(item_group)  # Remove the current item instance
 
                     # For rendering
                     render_x = new_x * settings.TILE_SIZE
@@ -171,6 +182,19 @@ def main():
                     print('player generated at render_x: ', render_x, ' and render_y: ', render_y)
 
                     player_group.add(player1)  # Add the new player instance to the sprite group
+                    
+                    new_enemies = random.randint(3,7)
+                    
+                    for i in range(new_enemies):
+                        enemy = Enemy(new_dungeon)  # Create a new enemy instance for the new dungeon
+                        print('enemy instance created')
+                        enemy_group.add(enemy)  # Add the new enemy instance to the sprite group
+                        print('enemy added')
+                        
+                        enemy.animate()
+                    
+                    item = Item(new_dungeon, 'Assets/Art/orb_red.png')  # Create a new item instance for the new dungeon
+                    item_group.add(item)  # Add the new item instance to the sprite group
 
                     wiping_direction = -1  # Start wiping out
 

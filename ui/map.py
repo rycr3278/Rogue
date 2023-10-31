@@ -45,7 +45,42 @@ class DungeonMap:
         self.rooms = []
         self.door_coordinates = {"top":(0,0), "bottom":(0,0), "left":(0,0), "right":(0,0)}
         self.generate_dungeon()
+        
+        # Initialize display_tiles with the same dimensions as dungeon_map
+        self.display_tiles = [[None for _ in range(MAP_HEIGHT)] for _ in range(MAP_WIDTH)]
+        self.generate_tiles()
+        
         print('new dungeon generated')
+        
+    def generate_tiles(self):
+        for y in range(MAP_HEIGHT):
+            for x in range(MAP_WIDTH):
+                if self.dungeon_map[x][y] == LEFT_TOP_CORNER:
+                    tile = settings.LEFT_TOP_CORNER_TILE
+                elif self.dungeon_map[x][y] == RIGHT_TOP_CORNER:
+                    tile = settings.RIGHT_TOP_CORNER_TILE
+                elif self.dungeon_map[x][y] == LEFT_BOTTOM_CORNER:
+                    tile = settings.LEFT_BOTTOM_CORNER_TILE
+                elif self.dungeon_map[x][y] == RIGHT_BOTTOM_CORNER:
+                    tile = settings.RIGHT_BOTTOM_CORNER_TILE
+                elif self.dungeon_map[x][y] == TOP_EDGE:
+                    tile = settings.TOP_EDGE_TILE
+                elif self.dungeon_map[x][y] == RIGHT_EDGE:
+                    tile = settings.RIGHT_EDGE_TILE
+                elif self.dungeon_map[x][y] == LEFT_EDGE:
+                    tile = settings.LEFT_EDGE_TILE
+                elif self.dungeon_map[x][y] == FLOOR:
+                    tile = settings.FLOOR_TILE
+                elif self.dungeon_map[x][y] == USED_DOOR:
+                    tile = settings.USED_DOOR_TILE  
+                elif self.dungeon_map[x][y] == DOOR:
+                    tile = settings.DOOR_TILE
+                elif self.dungeon_map[x][y] == BOTTOM_EDGE:
+                    tile = settings.FLOOR_TILE
+                else:
+                    tile = settings.get_random_wall_tile()
+                
+                self.display_tiles[x][y] = tile
 
     def add_room(self, room):
         # Check if room overlaps with existing rooms or is too close to the edges.
@@ -232,36 +267,10 @@ class DungeonMap:
         
 
 
+    
+                 
     def display_map(self, screen):
-        # Render the dungeon map onto the screen
+        # Render the dungeon map onto the screen 
         for y in range(MAP_HEIGHT):
             for x in range(MAP_WIDTH):
-                screen.blit(settings.DEFAULT_TILE, (x * settings.TILE_SIZE, y * settings.TILE_SIZE))
-                    
-        for y in range(MAP_HEIGHT):
-            for x in range(MAP_WIDTH):
-                if self.dungeon_map[x][y] == LEFT_TOP_CORNER:
-                    tile = settings.LEFT_TOP_CORNER_TILE
-                elif self.dungeon_map[x][y] == RIGHT_TOP_CORNER:
-                    tile = settings.RIGHT_TOP_CORNER_TILE
-                elif self.dungeon_map[x][y] == LEFT_BOTTOM_CORNER:
-                    tile = settings.LEFT_BOTTOM_CORNER_TILE
-                elif self.dungeon_map[x][y] == RIGHT_BOTTOM_CORNER:
-                    tile = settings.RIGHT_BOTTOM_CORNER_TILE
-                elif self.dungeon_map[x][y] == TOP_EDGE:
-                    tile = settings.TOP_EDGE_TILE
-                elif self.dungeon_map[x][y] == RIGHT_EDGE:
-                    tile = settings.RIGHT_EDGE_TILE
-                elif self.dungeon_map[x][y] == LEFT_EDGE:
-                    tile = settings.LEFT_EDGE_TILE
-                elif self.dungeon_map[x][y] == FLOOR:
-                    tile = settings.FLOOR_TILE
-                elif self.dungeon_map[x][y] == USED_DOOR:
-                    tile = settings.USED_DOOR_TILE  
-                elif self.dungeon_map[x][y] == DOOR:
-                    tile = settings.DOOR_TILE
-                elif self.dungeon_map[x][y] == BOTTOM_EDGE:
-                    tile = settings.FLOOR_TILE
-                else:
-                    tile = settings.WALL_TILE
-                screen.blit(tile, (x*settings.TILE_SIZE, y*settings.TILE_SIZE))
+                screen.blit(self.display_tiles[x][y], (x * settings.TILE_SIZE, y * settings.TILE_SIZE))

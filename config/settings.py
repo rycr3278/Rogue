@@ -2,9 +2,11 @@ import pygame as py
 import os
 import sys
 
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from ui.map import MAP_WIDTH, MAP_HEIGHT
+import random
 
 # constant colors
 DARK_BLUE = (62, 76, 89)
@@ -12,6 +14,11 @@ MED_BLUE = (128, 167, 191)
 LIGHT_BLUE = (172, 215, 242)
 YELLOW = (242, 220, 153)
 BROWN = (191, 131, 78)
+
+def get_random_wall_tile():
+    random_wall_tile = py.image.load(os.path.join('Assets/Art/map_tiles/ps/wall_0' + str(random.randint(1, 7)) + '.jpg'))
+    return py.transform.scale(random_wall_tile, (TILE_SIZE, TILE_SIZE))
+    
 
 # Constants for display
 TILE_SIZE = 40  # Size of each cell in pixels
@@ -23,7 +30,7 @@ FLOOR_TILE = py.transform.scale(FLOOR_TILE, (TILE_SIZE, TILE_SIZE))
 
 DEFAULT_TILE = FLOOR_TILE
 
-WALL_TILE =  py.image.load(os.path.join('Assets/Art/map_tiles/tile012.png')) 
+WALL_TILE = py.image.load(os.path.join('Assets/Art/map_tiles/ps/wall_0' + str(random.randint(1, 7)) + '.jpg')) 
 WALL_TILE = py.transform.scale(WALL_TILE, (TILE_SIZE, TILE_SIZE))
 
 TOP_EDGE_TILE =  py.image.load(os.path.join('Assets/Art/map_tiles/tile019.png')) 

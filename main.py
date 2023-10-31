@@ -158,7 +158,7 @@ def main():
                     
                     # offset player position to help prevent spawning in walls
                     if door_direction == "top":
-                        render_y -= settings.PLAYER1_HEIGHT * 2
+                        render_y -= settings.PLAYER1_HEIGHT
                     elif door_direction == "bottom":
                         render_y += settings.PLAYER1_HEIGHT
                     elif door_direction == "left":

@@ -150,8 +150,8 @@ class DungeonMap:
         left_door_exists = False
         bottom_door_exists = False
         
-        for y in range(1, MAP_HEIGHT - ((MAP_HEIGHT // 4) * 3)):  # only populate top 25% of map with door
-            for x in range(MAP_WIDTH // 2, MAP_WIDTH - 1):
+        for y in range(1, MAP_HEIGHT // 2):  # only populate top 50% of map with door
+            for x in range(MAP_WIDTH // 3, MAP_WIDTH - 1):
                 # top door
                 if self.dungeon_map[x][y] == TOP_EDGE and not top_door_exists:
                     self.dungeon_map[x][y] = DOOR
@@ -159,8 +159,8 @@ class DungeonMap:
                     self.door_coordinates["top"] = (x, y)
                     print(f"Added top door at x: {x}, y: {y}")
                     
-        for y in range(((MAP_HEIGHT // 4) * 3), MAP_HEIGHT - 1):  # only populate bottom 25% of map with door
-            for x in range(MAP_WIDTH // 2, MAP_WIDTH - 1):        
+        for y in range(MAP_HEIGHT // 2, MAP_HEIGHT - 1):  # only populate bottom 50% of map with door
+            for x in range(1, MAP_WIDTH - 1):        
                 # bottom door
                 if self.dungeon_map[x][y] == BOTTOM_EDGE and not bottom_door_exists:
                     self.dungeon_map[x][y+1] = DOOR
@@ -170,8 +170,8 @@ class DungeonMap:
                     self.door_coordinates["bottom"] = (x, y + 1)
                     print(f"Added bottom door at x: {x}, y: {y}")
                     
-        for y in range(1, MAP_HEIGHT - 1):  # only populate left side
-            for x in range(1, MAP_WIDTH // 4):           
+        for y in range(MAP_HEIGHT // 2, MAP_HEIGHT - 1):  # only populate left side
+            for x in range(1, MAP_WIDTH // 2):           
                 # left door
                 if self.dungeon_map[x][y] == LEFT_EDGE and not left_door_exists:
                     self.dungeon_map[x-1][y] = DOOR
@@ -183,7 +183,7 @@ class DungeonMap:
                     print(f"Added left door at x: {x}, y: {y}")
                     
         for y in range(1, MAP_HEIGHT - 1):  # only populate right side
-            for x in range(((MAP_WIDTH // 4) * 3), MAP_WIDTH - 1):           
+            for x in range(MAP_WIDTH // 2, MAP_WIDTH - 1):           
                 # RIGHT  door
                 if self.dungeon_map[x][y] == RIGHT_EDGE and not right_door_exists:
                     self.dungeon_map[x+1][y] = DOOR

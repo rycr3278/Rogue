@@ -12,13 +12,12 @@ class Player1(py.sprite.Sprite):
     _instance = None
 
     @classmethod
-    def get_instance(cls, dungeon_instance=None):
-        if cls._instance is None:
-            cls._instance = Player1(dungeon_instance)
+    def get_instance(cls, dungeon_instance=None, x=None, y=None):
+        if cls._instance is None or (x is not None and y is not None):
+            cls._instance = Player1(dungeon_instance, x, y)
         return cls._instance
 
-    
-    def __init__(self, dungeon_instance):
+    def __init__(self, dungeon_instance, x=None, y=None):
         super().__init__()
         self.dungeon = dungeon_instance
         # player walking
@@ -78,7 +77,12 @@ class Player1(py.sprite.Sprite):
         
         self.is_animating = False
         
-        self.direction = "down" # default direction
+        # default position
+        if x is not None and y is not None:
+            self.rect.topleft = (x, y)
+        
+        # default direction    
+        self.direction = "down" 
         
     def animate(self):
         self.is_animating = True
@@ -141,21 +145,16 @@ class Player1(py.sprite.Sprite):
                 self.direction = 'down'
                 self.is_animating = True
                 
+    def remove(self):
+        """Remove the player instance from the game."""
+        self.kill()  # This will remove the sprite from all groups it belongs to
+        Player1._instance = None
+
+    # Update the collided_with_door method to use the new door_direction logic
     def collided_with_door(self):
         """Check if the player has collided with a door and return its direction."""
-        # Calculate the tile index based on the player's position
-        x = self.rect.centerx // s.TILE_SIZE
-        y = self.rect.centery // s.TILE_SIZE
-
-        print(f"Player's coordinates: {(x,y)}")  # Debugging log
-
-        door_coords = self.dungeon.get_door_coordinates()
-
-        for direction, coords in door_coords.items():
-            if (x, y) == coords:
-                return direction
-
-        return None
+        direction = self.door_direction(self.dungeon)
+        return direction
 
     def door_direction(self, dungeon):
         """Determine which side of the screen the door is on based on the x-coordinate."""
@@ -164,8 +163,8 @@ class Player1(py.sprite.Sprite):
 
         door_coords = dungeon.get_door_coordinates()
 
-        print(f"Player's coordinates for door direction: {(x,y)}")  # Debugging log
-        print(f"Door coordinates: {door_coords}")  # Debugging log
+        #print(f"Player's coordinates for door direction: {(x,y)}")  # Debugging log
+        #print(f"Door coordinates: {door_coords}")  # Debugging log
 
         if (x, y) == door_coords["top"]:
             return "top"
@@ -176,7 +175,7 @@ class Player1(py.sprite.Sprite):
         elif (x, y) == door_coords["right"]:
             return "right"
         else:
-            print("Player is not on any door!")
+            #print("Player is not on any door!")
             return None
 
 

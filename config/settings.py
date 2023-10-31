@@ -54,7 +54,7 @@ DOOR_TILE = py.transform.scale(DOOR_TILE, (TILE_SIZE, TILE_SIZE))
 
 # game settings
 FPS = 60
-VEL = 2
+VEL = 6
 
 PLAYER1_WIDTH, PLAYER1_HEIGHT = 60, 60
 

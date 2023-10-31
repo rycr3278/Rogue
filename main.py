@@ -40,20 +40,45 @@ for y in range(MAP_HEIGHT):
         continue
     break
 
+
+def get_new_spawn_coordinates(direction, new_dungeon):
+    door_coords = new_dungeon.get_door_coordinates()
+
+    # Determine the opposite door direction
+    opposite_direction = {
+        "left": "right",
+        "right": "left",
+        "top": "bottom",
+        "bottom": "top"
+    }.get(direction)
+    
+    if opposite_direction in door_coords:  # Additional check to ensure the key exists
+        x, y = door_coords[opposite_direction]
+        if opposite_direction == "top":
+            y += settings.TILE_SIZE
+        elif opposite_direction == "bottom":
+            y -= settings.TILE_SIZE
+        elif opposite_direction == "left":
+            x += settings.TILE_SIZE
+        elif opposite_direction == "right":
+            x -= settings.TILE_SIZE
+        return x, y
+    else:
+        print("Unexpected door_direction:", direction)
+        return None, None
+
+
 # Main game loop function
 def main():
     # Hide the default mouse cursor
     py.mouse.set_visible(False)
     
     # Declare global wipe variables
-    global is_wiping, wiping_direction, wipe_rect, dungeon
+    global player1, is_wiping, wiping_direction, wipe_rect, dungeon
     
     # Create a sprite group for the player
     player_group = py.sprite.Group()
     player_group.add(player1)
-    
-    # Flag for player position after transition
-    reposition_player = False
 
     # Get the cursor instance
     cursor = Cursor.get_instance()
@@ -93,22 +118,36 @@ def main():
         # Check for door collisions
         door_direction = player1.collided_with_door()
         
+        if door_direction and not is_wiping:
+            # Generate new map
+            new_dungeon = DungeonMap()
 
-        if door_direction:
-            print(f"Starting wipe animation due to collision with door...")  # Debug message
-            is_wiping = True
-            wiping_direction = 1
-        
+            # Determine the new spawn coordinates based on the door's direction
+            new_x, new_y = get_new_spawn_coordinates(door_direction, new_dungeon)
+            print("new_x, new_y", new_x, new_y)
+            
+            if new_x is not None and new_y is not None:
+                print(door_direction)
+                is_wiping = True
+                wiping_direction = 1  # Start the wipe-in transition
+            else:
+                print("Failed to get new spawn coordinates.")
+            
         if is_wiping:
             if wiping_direction == 1:  # Wiping in
                 if wipe_rect.width < settings.WIDTH:
                     wipe_rect.width += WIPE_SPEED
                 else:
-                    # Generate new map
-                    dungeon = DungeonMap()
-                    door_coords = dungeon.get_door_coordinates()
-                    print(door_coords)
-                    player1.dungeon = dungeon
+                    # Switch to the new dungeon
+                    dungeon = new_dungeon
+                    
+                    # Remove the current player instance
+                    player1.remove()
+
+                    # Create a new player instance at the new coordinates
+                    player1 = Player1.get_instance(dungeon, (new_x * settings.TILE_SIZE), (new_y * settings.TILE_SIZE))
+                    player_group.add(player1)  # Add the new player instance to the sprite group
+
                     wiping_direction = -1  # Start wiping out
 
             elif wiping_direction == -1:  # Wiping out
@@ -116,29 +155,6 @@ def main():
                     wipe_rect.width -= WIPE_SPEED
                 else:
                     is_wiping = False  # End the wipe effect
-                    
-                    # Determine the opposite door direction
-                    if door_direction in ["left", "right", "top", "bottom"]:
-                        opposite_direction = {
-                            "left": "right",
-                            "right": "left",
-                            "top": "bottom",
-                            "bottom": "top"
-                        }.get(door_direction)
-                        
-                        # Position the player at the door tile in the opposite direction
-                        if opposite_direction in door_coords:  # Additional check to ensure the key exists
-                            player1.rect.x, player1.rect.y = door_coords[opposite_direction]
-                            if opposite_direction == "top":
-                                player1.rect.y += settings.TILE_SIZE
-                            elif opposite_direction == "bottom":
-                                player1.rect.y -= settings.TILE_SIZE
-                            elif opposite_direction == "left":
-                                player1.rect.x += settings.TILE_SIZE
-                            elif opposite_direction == "right":
-                                player1.rect.x -= settings.TILE_SIZE
-                    else:
-                        print("Unexpected door_direction:", door_direction)
 
             # Render the wipe effect on top of the game scene
             settings.WIN.fill((0,0,0), wipe_rect)

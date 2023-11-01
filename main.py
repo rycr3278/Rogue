@@ -26,10 +26,11 @@ wipe_rect = py.Rect(0, 0, 0, settings.HEIGHT)
 is_wiping = False
 wiping_direction = 1  # 1 for wiping in, -1 for wiping out
 
-
-
 # Get the player instance and set its position
 player1 = Player1.get_instance(dungeon)
+
+
+
 # Loop through the dungeon map to find a floor tile to position the player
 for y in range(MAP_HEIGHT):
     for x in range(MAP_WIDTH):
@@ -40,7 +41,6 @@ for y in range(MAP_HEIGHT):
     else:
         continue
     break
-
 
 def get_new_spawn_coordinates(direction, new_dungeon):
     door_coords = new_dungeon.get_door_coordinates()
@@ -57,19 +57,13 @@ def get_new_spawn_coordinates(direction, new_dungeon):
     
     if opposite_direction in door_coords:  # Additional check to ensure the key exists
         x, y = door_coords[opposite_direction]
-        
-        
         print('get_new_spawn_coordinates is outputting coordinates: x:', x, ', y:', y)
-        
-        
-        
+           
         return x, y
     else:
         print("Unexpected door_direction:", direction)
         # Return default spawn location (center of the map)
         return MAP_WIDTH * settings.TILE_SIZE // 2, MAP_HEIGHT * settings.TILE_SIZE // 2
-
-
 
 # Main game loop function
 def main():
@@ -87,8 +81,7 @@ def main():
     cursor = Cursor.get_instance()
     
     # Create an enemy instance and add it to the enemy group
-    
-    enemy = Enemy(dungeon)  # Create a new enemy instance for the new dungeon
+    enemy = Enemy.get_instance(dungeon)  # Create a new enemy instance for the new dungeon
     print('enemy instance created')
     enemy_group.add(enemy)  # Add the new enemy instance to the sprite group
     print('enemy added')
@@ -116,6 +109,9 @@ def main():
         cursor.update()
         keys_pressed = py.key.get_pressed()
         player1.handle_movement(keys_pressed)
+        for enemy in enemy_group:
+            enemy.handle_movement()
+
         
         # Render the game scene
         dungeon.display_map(settings.WIN)        
@@ -161,8 +157,7 @@ def main():
                     for enemy in enemy_group:
                         enemy.remove(enemy_group)
                         print('enemy removed')
-                    
-                    
+
                     item.remove(item_group)  # Remove the current item instance
 
                     # For rendering
@@ -214,7 +209,6 @@ def main():
 
         # Update the player's state
         player_group.update()
-       
 
 # If this script is the main script being run, start the game
 if __name__ == "__main__":

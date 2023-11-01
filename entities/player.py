@@ -67,7 +67,7 @@ class Player1(py.sprite.Sprite):
         ]
         
         
-        self.current_sprite = 0
+        
         
         self.current_sprites = self.sprites_down
         self.current_sprite = 0

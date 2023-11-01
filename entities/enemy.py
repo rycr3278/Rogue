@@ -79,11 +79,11 @@ class Enemy(py.sprite.Sprite):
     def handle_movement(self):
         dx = 0
         dy = 0
-        
+            
         if self.move_counter <= 0:
             self.move_direction = random.randint(1,4)
             self.move_counter = random.randint(50, 200)  # Decide new direction after 50 to 200 frames
-        
+            
         if self.move_direction == 1:  # left
             dx -= s.ENEMY_VEL
         elif self.move_direction == 2:  # right
@@ -99,7 +99,7 @@ class Enemy(py.sprite.Sprite):
         # Check for collisions
         if not self.is_wall_rect(new_rect):
             self.rect = new_rect
-                
+                    
             # Determine animation based on direction
             if dx < 0:
                 self.current_sprites = self.sprites_left
@@ -117,8 +117,19 @@ class Enemy(py.sprite.Sprite):
                 self.current_sprites = self.sprites_right
                 self.direction = 'down'
                 self.is_animating = True
-                    
+        else:
+            # If collision with wall, reverse direction
+            if self.move_direction == 1:
+                self.move_direction = 2
+            elif self.move_direction == 2:
+                self.move_direction = 1
+            elif self.move_direction == 3:
+                self.move_direction = 4
+            elif self.move_direction == 4:
+                self.move_direction = 3
+
         self.move_counter -= 1
+
         
     def find_floor_tile(self, dungeon_instance):
         """Find a random floor tile to place the enemy."""

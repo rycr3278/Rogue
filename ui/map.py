@@ -79,7 +79,6 @@ class DungeonMap:
                     tile = settings.FLOOR_TILE
                 else:
                     tile = settings.get_random_wall_tile()
-                
                 self.display_tiles[x][y] = tile
 
     def add_room(self, room):
@@ -90,7 +89,7 @@ class DungeonMap:
                 room.y < r.y + r.height and room.y + room.height > r.y):
                 overlap = True
                 break
-        
+
         # Check if room is too close to the edges
         too_close_to_edge = (room.x < SAFETY_MARGIN or 
                              room.y < SAFETY_MARGIN or 
@@ -161,9 +160,7 @@ class DungeonMap:
                         self.dungeon_map[x][y] = LEFT_EDGE
                     elif bottom == WALL:
                         self.dungeon_map[x][y] = BOTTOM_EDGE
-            
 
-                        
     def add_corner_tiles(self):
         # Identify and add corner tiles in the dungeon
         for y in range(1, MAP_HEIGHT - 1):  # Start at 1 and end before the last to avoid out of bounds error
@@ -191,8 +188,7 @@ class DungeonMap:
                     self.dungeon_map[x][y-1] == LEFT_EDGE and 
                     self.dungeon_map[x-1][y] == TOP_EDGE):
                     self.dungeon_map[x][y] = RIGHT_BOTTOM_CORNER
-                        
-                    
+              
     def add_doors(self):
         # Add doors at specific positions in the dungeon
         top_door_exists = False
@@ -243,18 +239,17 @@ class DungeonMap:
                     right_door_exists = True
                     self.door_coordinates["right"] = (x + 1, y)
                     print(f"Added right door at x: {x}, y: {y}")
-        
-
-        
-                    
 
     def get_door_coordinates(self):
         return self.door_coordinates
-        
 
+    def update_display_tiles(self, x, y):
+        if self.dungeon_map[x][y] == USED_DOOR:
+            self.display_tiles[x][y] = settings.USED_DOOR_TILE
+    
     def generate_dungeon(self):
         # Generate multiple rooms and connect them
-        for i in range(10):  # Example: 10 rooms
+        for i in range(10):  # 10 rooms
             room = Room(random.randint(0, MAP_WIDTH - 10), random.randint(0, MAP_HEIGHT - 10), random.randint(5, 10), random.randint(5, 10))
             self.add_room(room)
         print(f"Total rooms generated: {len(self.rooms)}")

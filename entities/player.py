@@ -4,7 +4,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from ui.map import WALL, DOOR
+from ui.map import WALL, DOOR, USED_DOOR
 
 from config import settings as s
 
@@ -159,6 +159,7 @@ class Player1(py.sprite.Sprite):
         # Check if the tile the player is colliding with is a DOOR tile
         if self.dungeon.dungeon_map[x][y] == DOOR:
             direction = self.door_direction(x, y)  # Pass x and y to the door_direction method
+            
             return direction
         return None
 

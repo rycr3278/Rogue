@@ -28,5 +28,5 @@ def draw_window(player1, item_group, cursor):
     '''    
     
     settings.WIN.blit(player1.image, (player1.rect.x, player1.rect.y))  # Use player1's image
-    py.draw.rect(settings.WIN, (255, 255, 255), player1.rect, 2) # Draw player rect in white
+    #py.draw.rect(settings.WIN, (255, 255, 255), player1.rect, 2) # Draw player rect in white
     

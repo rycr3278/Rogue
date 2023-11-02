@@ -75,15 +75,30 @@ class Enemy(py.sprite.Sprite):
                 if self.dungeon_instance.dungeon_map[x][y] == WALL:
                     return True
         return False
-    
-    def handle_movement(self):
+
+    def get_player_distance_direction(self, player):
+        enemy_vec = py.math.Vector2(self.rect.center)
+        player_vec = py.math.Vector2(player.rect.center)
+        distance = (player_vec - enemy_vec).magnitude()
+
+        if distance > 0:
+            direction = (player_vec - enemy_vec).normalize()
+        else:
+            direction = py.math.Vector2()
+        
+        return (distance, direction)
+
+    def move_towards_player(self, player):
+        distance, direction = self.get_player_distance_direction(player)
+
+    def handle_movement(self, player):
         dx = 0
         dy = 0
-            
+        
         if self.move_counter <= 0:
             self.move_direction = random.randint(1,4)
-            self.move_counter = random.randint(50, 200)  # Decide new direction after 50 to 200 frames
-            
+            self.move_counter = random.randint(50, 150)  # Decide new direction after 50 to 200 frames
+                
         if self.move_direction == 1:  # left
             dx -= s.ENEMY_VEL
         elif self.move_direction == 2:  # right

@@ -18,8 +18,8 @@ BOTTOM_EDGE = 10
 USED_DOOR = 11
 
 # Map dimensions
-MAP_WIDTH = 48
-MAP_HEIGHT = 27
+MAP_WIDTH = 40
+MAP_HEIGHT = 20
 
 # Map safety border to prevent rooms from being generated on edges
 SAFETY_MARGIN = 2

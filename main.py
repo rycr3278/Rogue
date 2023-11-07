@@ -108,7 +108,7 @@ def main():
         keys_pressed = py.key.get_pressed()
         player1.handle_movement(keys_pressed)
         for enemy in enemy_group:
-            enemy.handle_movement()
+            enemy.handle_movement(player1)
 
         # Render the game scene
         dungeon.display_map(settings.WIN)        

@@ -51,7 +51,7 @@
 
 ## Development Milestones:
 1. **Prototype:** Basic movement, map generation, and combat (1 month).
-2. **Alpha:** Introduce items, more monsters, and 10 dungeon levels (3 months).
-3. **Beta:** Full 50-level dungeon, legendary creatures, and polish (5 months).
+2. **Alpha:** Introduce items, more monsters (3 months).
+3. **Beta:** Legendary creatures, menus, and polish (5 months).
 4. **Release:** Full game launch with marketing (8 months).
 

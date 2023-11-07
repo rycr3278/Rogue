@@ -29,8 +29,6 @@ wiping_direction = 1  # 1 for wiping in, -1 for wiping out
 # Get the player instance and set its position
 player1 = Player1.get_instance(dungeon)
 
-
-
 # Loop through the dungeon map to find a floor tile to position the player
 for y in range(MAP_HEIGHT):
     for x in range(MAP_WIDTH):
@@ -112,7 +110,6 @@ def main():
         for enemy in enemy_group:
             enemy.handle_movement()
 
-        
         # Render the game scene
         dungeon.display_map(settings.WIN)        
         draw_window(player1, item_group, cursor)
@@ -213,4 +210,3 @@ def main():
 # If this script is the main script being run, start the game
 if __name__ == "__main__":
     main()
-
